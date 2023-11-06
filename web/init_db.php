@@ -8,16 +8,16 @@ $conn->query("CREATE TABLE IF NOT EXISTS products (id CHAR(4), product_name VARC
 $conn->query("CREATE TABLE IF NOT EXISTS users (id VARCHAR(256) PRIMARY KEY, username VARCHAR(128), password VARCHAR(128), user_group VARCHAR(32))");
 
 /** Insert a default 'admin' account */
-$username = "me";
-$password = hash("sha256", "123");
+$username = "admin@store.com";
+$password = hash("sha256", "Abc123@");
 $userid = hash("sha256", $username . $password);
 if (mysqli_num_rows($conn->query("SELECT * FROM OnlineStore.users WHERE id='$userid'")) <= 0) {
     $conn->query("INSERT INTO OnlineStore.users (id, username, password, user_group) VALUES ('$userid', '$username', '$password', 'Admin')");
 }
 
 /** Insert a default 'client' account */
-$username = "teacher";
-$password = hash("sha256", "123");
+$username = "teacher@store.com";
+$password = hash("sha256", "Abc123@");
 $userid = hash("sha256", $username . $password);
 if (mysqli_num_rows($conn->query("SELECT * FROM OnlineStore.users WHERE id='$userid'")) <= 0) {
     $conn->query("INSERT INTO OnlineStore.users (id, username, password, user_group) VALUES ('$userid', '$username', '$password', 'Client')");

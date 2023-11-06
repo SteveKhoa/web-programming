@@ -24,8 +24,10 @@
         {
             if (array_key_exists($model_type, $this->available_models)) {
                 // Delegate the data to appropriate model
+                include_once($_SERVER['DOCUMENT_ROOT'] . "/" . $this->available_models[$model_type]['src']);
 
-                include "../" . $this->available_models[$model_type];
+                if (isset($this->available_models[$model_type]['params']))
+                    $model->handleParams($this->available_models[$model_type]['params']);
                 $model->handleData($this->data);
             } else {
                 header("Location: http://" . $_SERVER['HTTP_HOST'] . "/" . "error_handler.php?type=invalid_service");
@@ -34,10 +36,11 @@
     }
 
     $available_models = array(
-        "login" => "models/login.php",
-        "add_products" => "models/insert.php",
-        "register" => "models/register.php",
-        "logout" =>  "models/logout.php"
+        "login" => array("src" => "models/login.php", "params" => array()),
+        "add_products" => array("src" => "models/products.php", "params" => array("add")),
+        "view_products" => array("src" => "models/products.php", "params" => array("view")),
+        "register" => array("src" => "models/register.php", "params" => array()),
+        "logout" =>  array("src" => "models/logout.php", "params" => array())
     );
 
     $form_controller = new FormController(array(), $available_models);

@@ -21,6 +21,6 @@ class Router
 
     public function renderPage()
     {
-        include "views/" . $this->page . "/" . $this->page . ".php";
+        include "views/" . "pages/" . $this->page . "/" . $this->page . ".php";
     }
 }

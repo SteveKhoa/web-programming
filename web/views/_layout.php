@@ -1,4 +1,11 @@
 <?php
+
+/** Enable PHP error reporting */
+error_reporting(E_ALL);
+ini_set('display_errors', '1');
+?>
+
+<?php
 session_start();
 
 // Each session will be terminated after 30 seconds
@@ -16,6 +23,7 @@ if (isset($_SESSION['STARTED']) && isset($session_timeout) && (time() - $_SESSIO
     <title>Online Store</title>
 
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 </head>
 
