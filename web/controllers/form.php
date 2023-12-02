@@ -1,4 +1,4 @@
-<div>
+
     <?php
     ini_set('display_errors', 1);
     ini_set('display_startup_errors', 1);
@@ -15,12 +15,27 @@
             $this->available_models = $available_models;
         }
 
-        public function updateData($data)
+        public function listeningToRequests()
+        {
+            if (isset($_GET['type'])) {
+                $form_type = $_GET['type'];
+
+                if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+                    $this->updateData($_POST);
+                } else {
+                    $this->updateData($_GET);
+                }
+
+                $this->delegateToModel($form_type);
+            }
+        }
+
+        private function updateData($data)
         {
             $this->data = $data;
         }
 
-        public function delegateToModel($model_type)
+        private function delegateToModel($model_type)
         {
             if (array_key_exists($model_type, $this->available_models)) {
                 // Delegate the data to appropriate model
@@ -39,22 +54,12 @@
         "login" => array("src" => "models/login.php", "params" => array()),
         "add_products" => array("src" => "models/products.php", "params" => array("add")),
         "view_products" => array("src" => "models/products.php", "params" => array("view")),
+        "query_products" => array("src" => "models/products.php", "params" => array("query")),
+        "details_product" => array("src" => "models/products.php", "params" => array("details")),
         "register" => array("src" => "models/register.php", "params" => array()),
         "logout" =>  array("src" => "models/logout.php", "params" => array())
     );
 
     $form_controller = new FormController(array(), $available_models);
-
-    if (isset($_GET['type'])) {
-        $form_type = $_GET['type'];
-
-        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-            $form_controller->updateData($_POST);
-        } else {
-            $form_controller->updateData($_GET);
-        }
-
-        $form_controller->delegateToModel($form_type);
-    }
+    $form_controller->listeningToRequests();
     ?>
-</div>

@@ -24,6 +24,7 @@ if (isset($_SESSION['STARTED']) && isset($session_timeout) && (time() - $_SESSIO
 
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 </head>
 
@@ -36,10 +37,14 @@ if (isset($_SESSION['STARTED']) && isset($session_timeout) && (time() - $_SESSIO
                         <img src="/assets/favicon.png" alt="" width="32" height="32" class="d-inline-block align-text-top">
                     </a>
                 </div>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarContents">
+                    <span class="navbar-toggler-icon material-icons nav-link">unfold_more</span>
+                </button>
                 <div class="collapse navbar-collapse" id="navbarContents">
                     <div class="navbar-nav fw-bold">
                         <a class="nav-link" href="index.php?page=home">Home</a>
                         <a class="nav-link" href="index.php?page=products">Products</a>
+                        <a class="nav-link" href="index.php?page=ggmap">Store Map</a>
                         <?php if (isset($_SESSION['STARTED'])) { ?>
                             <a class="nav-link" href="controllers/form.php?type=logout">Logout</a>
                         <?php } else { ?>
@@ -54,22 +59,54 @@ if (isset($_SESSION['STARTED']) && isset($session_timeout) && (time() - $_SESSIO
                         <span class="nav-text"><?php echo $_SESSION['user_group'] ?></span>
                     </div>
                 <?php } ?>
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarContents">
-                    <span class="navbar-toggler-icon material-icons nav-link">unfold_more</span>
-                </button>
             </div>
         </nav>
     </div>
-    <div id="app-body">
+    <div id="app-body" style="min-height: 500px;">
         <div class='m-5'>
             <?php
             $router->renderPage();
             ?>
         </div>
     </div>
-    <div id="app-footer" style="height:200px;"></div>
-</body>
+    <div id="app-footer" class="bg-light p-5" style="min-height:100px;">
+        <div>
+            <span class="text-muted">&#169; Ng Khoa. All rights reserved.</span>
+            <div class="nav mb-5">
+                <span class="nav-link ps-0" href="" onclick="ajaxTermsAndServices()">Terms and Services</span>
 
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+                <script>
+                    let toggleTermsAndServices = false;
+
+                    const ajaxTermsAndServices = () => {
+                        let footerContents = document.querySelector("#footer-contents");
+
+                        if (toggleTermsAndServices == true) {
+                            footerContents.innerHTML = "";
+                            toggleTermsAndServices = false;
+                            return;
+                        }
+
+                        const xmlhttp = new XMLHttpRequest();
+
+                        xmlhttp.onreadystatechange = () => {
+                            if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
+                                footerContents.innerHTML = xmlhttp.responseText;
+                                toggleTermsAndServices = true;
+                            }
+                        }
+
+                        xmlhttp.open("GET", "terms_services.html", true);
+                        xmlhttp.send();
+                    }
+
+                    ajaxTermsAndServices();
+                </script>
+            </div>
+
+            <div id="footer-contents"></div>
+        </div>
+    </div>
+</body>
 
 </html>

@@ -3,7 +3,7 @@ include_once("commons.php");
 
 class RegisterModel extends Model
 {
-    public function validateInput($username, $password)
+    private function validateInput($username, $password)
     {
         $is_valid_username = filter_var($username, FILTER_VALIDATE_EMAIL) !== "";
         $is_valid_password = preg_match('/^(?=.*\d)(?=.*[a-zA-Z])(?=.*[^a-zA-Z\d])(?=.*[A-Z]).*$/', $password);
@@ -32,6 +32,12 @@ class RegisterModel extends Model
             header("Location: http://" . $_SERVER['HTTP_HOST'] . "/" . "index.php?page=login&auth_err&err_msg=$err_msg&solution_href=$solution_href&solution_msg=$solution_msg&invalid_username=$username");
         } else {
             $conn->query("INSERT INTO OnlineStore.users (id, username, password, user_group) VALUES ('$userid', '$username', '$password', 'Client')");
+
+            if (isset($data['city']) && isset($data['district'])) {
+                $city = $data['city'];
+                $district = $data['district'];
+                $conn->query("INSERT INTO OnlineStore.user_addresses (id, city, province) VALUES ('$userid', '$city', '$district')");
+            }
 
             header("Location: http://" . $_SERVER['HTTP_HOST'] . "/" . "index.php?page=login&register_sucess=$username");
         }
