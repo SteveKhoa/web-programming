@@ -1,3 +1,3 @@
-# web-programming
+# Online Store
 
-to-do: Lab 3.2
+Simple server-side rendering web application using vanilla Javascript, PHP and Bootstrap.
